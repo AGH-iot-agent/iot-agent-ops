@@ -48,6 +48,6 @@ for i in $(seq 1 $AVAILABLE); do
     -e DISABLE_AUTO_UPDATE=1 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /var/lib/iot-agent:/var/lib/iot-agent \
-    myoung34/github-runner:latest
+    my-gha-runner:java
 
 done

@@ -47,6 +47,8 @@ for i in $(seq 1 $AVAILABLE); do
     -e EPHEMERAL=1 \
     -e DISABLE_AUTO_UPDATE=1 \
     -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /run/k3s:/run/k3s \
+    -v /etc/rancher/k3s:/etc/rancher/k3s:ro \
     -v /var/lib/iot-agent:/var/lib/iot-agent \
     my-gha-runner:java
 

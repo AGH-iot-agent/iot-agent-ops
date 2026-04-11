@@ -39,6 +39,7 @@ for i in $(seq 1 $AVAILABLE); do
 
   docker run -d \
     --name "gha-runner-$ID" \
+    --network host \
     -e RUNNER_NAME="runner-$ID" \
     -e RUNNER_TOKEN="$REG_TOKEN" \
     -e RUNNER_SCOPE="org" \

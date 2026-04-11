@@ -42,11 +42,8 @@ for i in $(seq 1 $AVAILABLE); do
     --name "gha-runner-$ID" \
     -e RUNNER_NAME="runner-$ID" \
     -e RUNNER_TOKEN="$REG_TOKEN" \
+    -e RUNNER_URL="https://github.com/$ORG" \
+    -e RUNNER_WORKDIR="/tmp/runner" \
     -e RUNNER_ALLOW_RUNASROOT=1 \
-    -e ORG_URL="https://github.com/$ORG" \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    ghcr.io/actions/actions-runner:latest \
-    ./config.sh --url https://github.com/$ORG --token $REG_TOKEN --unattended --ephemeral --replace && \
-    ./run.sh
-
+    ghcr.io/actions/actions-runner:latest
 done

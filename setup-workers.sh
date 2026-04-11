@@ -41,11 +41,10 @@ for i in $(seq 1 $AVAILABLE); do
     --rm \
     --name "gha-runner-$ID" \
     -e RUNNER_NAME="runner-$ID" \
-    -e RUNNER_TOKEN="$REG_TOKEN" \
     -e RUNNER_URL="https://github.com/$ORG" \
-    -e RUNNER_WORKDIR="/tmp/runner" \
+    -e RUNNER_TOKEN="$REG_TOKEN" \
     -e RUNNER_ALLOW_RUNASROOT=1 \
     -e RUNNER_LABELS="UBUNTU_DEFAULT" \
     ghcr.io/actions/actions-runner:latest
-    ./run.sh
+
 done

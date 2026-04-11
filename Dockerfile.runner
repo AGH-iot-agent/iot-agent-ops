@@ -11,6 +11,13 @@ RUN apt-get update && apt-get install -y \
     locales && \
     rm -rf /var/lib/apt/lists/*
 
+# Verify ctr is available (from containerd.io in base image)
+RUN ctr --version || { echo "ERROR: ctr not found, installing containerd.io"; apt-get update && apt-get install -y containerd.io && rm -rf /var/lib/apt/lists/*; }
+
+# Install kubectl for k8s diagnostics
+RUN curl -fsSL "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+    -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV MAVEN_OPTS="-Xmx2g -XX:+UseG1GC"

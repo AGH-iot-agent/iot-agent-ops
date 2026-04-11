@@ -21,6 +21,11 @@ fi
 
 echo "Checking running runners..."
 
+# Ensure storage directories exist on host
+echo "Creating storage directories..."
+mkdir -p /mnt/storage/iot-agent/docker-local
+mkdir -p /mnt/storage/iot-agent/helm-charts
+
 RUNNING=$(docker ps --format '{{.Names}}' | grep -c "gha-runner" || true)
 
 echo "Currently running: $RUNNING"
@@ -44,12 +49,12 @@ for i in $(seq 1 $AVAILABLE); do
     -e RUNNER_TOKEN="$REG_TOKEN" \
     -e RUNNER_SCOPE="org" \
     -e ORG_NAME="$ORG" \
-    -e LABELS="self-hosted" \
+    -e LABELS="self-hosted,iot-agent-local" \
     -e DISABLE_AUTO_UPDATE=1 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /run/k3s:/run/k3s \
     -v /etc/rancher/k3s:/etc/rancher/k3s:ro \
-    -v /var/lib/iot-agent:/var/lib/iot-agent \
+    -v /mnt/storage/iot-agent:/mnt/storage/iot-agent \
     --restart always \
     my-gha-runner:java
 

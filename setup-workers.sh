@@ -38,13 +38,14 @@ for i in $(seq 1 $AVAILABLE); do
   ID=$(date +%s%N)
 
   docker run -d \
-    --rm \
     --name "gha-runner-$ID" \
     -e RUNNER_NAME="runner-$ID" \
     -e RUNNER_URL="https://github.com/$ORG" \
     -e RUNNER_TOKEN="$REG_TOKEN" \
     -e RUNNER_ALLOW_RUNASROOT=1 \
-    -e RUNNER_LABELS="UBUNTU_DEFAULT" \
+    -e RUNNER_LABELS="self-hosted" \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /var/lib/iot-agent:/var/lib/iot-agent \
     ghcr.io/actions/actions-runner:latest
 
 done

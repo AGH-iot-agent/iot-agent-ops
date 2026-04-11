@@ -47,4 +47,5 @@ for i in $(seq 1 $AVAILABLE); do
     -e RUNNER_ALLOW_RUNASROOT=1 \
     -e RUNNER_LABELS="UBUNTU_DEFAULT" \
     ghcr.io/actions/actions-runner:latest
+    ./run.sh
 done

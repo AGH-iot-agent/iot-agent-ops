@@ -40,12 +40,14 @@ for i in $(seq 1 $AVAILABLE); do
   docker run -d \
     --name "gha-runner-$ID" \
     -e RUNNER_NAME="runner-$ID" \
-    -e RUNNER_URL="https://github.com/$ORG" \
     -e RUNNER_TOKEN="$REG_TOKEN" \
-    -e RUNNER_ALLOW_RUNASROOT=1 \
-    -e RUNNER_LABELS="self-hosted" \
+    -e RUNNER_SCOPE="org" \
+    -e ORG_NAME="$ORG" \
+    -e LABELS="self-hosted" \
+    -e EPHEMERAL=1 \
+    -e DISABLE_AUTO_UPDATE=1 \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /var/lib/iot-agent:/var/lib/iot-agent \
-    ghcr.io/actions/actions-runner:latest
+    myoung34/github-runner:latest
 
 done

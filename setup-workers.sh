@@ -45,5 +45,6 @@ for i in $(seq 1 $AVAILABLE); do
     -e RUNNER_URL="https://github.com/$ORG" \
     -e RUNNER_WORKDIR="/tmp/runner" \
     -e RUNNER_ALLOW_RUNASROOT=1 \
+    -e RUNNER_LABELS="UBUNTU_DEFAULT" \
     ghcr.io/actions/actions-runner:latest
 done

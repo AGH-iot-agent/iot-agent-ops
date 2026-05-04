@@ -1,0 +1,39 @@
+FROM myoung34/github-runner:latest
+
+RUN apt-get update && apt-get install -y \
+    openjdk-21-jdk \
+    maven \
+    git \
+    curl \
+    gnupg \
+    unzip \
+    ca-certificates \
+    build-essential \
+    locales && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get update && apt-get install -y nodejs && \
+    corepack enable && \
+    node --version && npm --version && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN ARCH="$(dpkg --print-architecture)" && \
+        case "$ARCH" in \
+            amd64) YQ_ARCH="amd64" ;; \
+            arm64) YQ_ARCH="arm64" ;; \
+            *) echo "Unsupported architecture for yq: $ARCH" && exit 1 ;; \
+        esac && \
+        curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${YQ_ARCH}" \
+            -o /usr/local/bin/yq && \
+        chmod +x /usr/local/bin/yq && \
+        yq --version
+
+RUN ctr --version || { echo "ERROR: ctr not found, installing containerd.io"; apt-get update && apt-get install -y containerd.io && rm -rf /var/lib/apt/lists/*; }
+
+RUN curl -fsSL "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" \
+    -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+ENV PATH=$JAVA_HOME/bin:$PATH
+ENV MAVEN_OPTS="-Xmx2g -XX:+UseG1GC"
